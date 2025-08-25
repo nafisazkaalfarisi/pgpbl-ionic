@@ -1,0 +1,8 @@
+{
+  "name": "pgpbl ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "9091c188"
+}
