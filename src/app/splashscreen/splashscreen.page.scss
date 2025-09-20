@@ -1,0 +1,21 @@
+.splash-section {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  /* background gradasi dari kiri merah ke kanan biru */
+  background: linear-gradient(to right, red 0%, blue 100%);
+}
+
+img {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+}
+
+small {
+  font-size: 10px;
+  color: rgb(0, 255, 217);
+}
