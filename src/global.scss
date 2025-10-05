@@ -36,4 +36,114 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
-@import "leaflet/dist/leaflet.css"; 
+@import "leaflet/dist/leaflet.css";
+
+//
+// Leaflet Popup Customization (Glassmorphism)
+//
+
+// Wrapper for the entire popup
+.leaflet-popup-content-wrapper {
+  background: rgba(0, 0, 0, 0.25) !important; // Darker semi-transparent background
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// Remove default leaflet content margin
+.leaflet-popup-content {
+  margin: 0 !important;
+}
+
+// Arrow of the popup
+.leaflet-popup-tip {
+  background: transparent !important; // Make tip transparent
+}
+
+// Our custom container for the popup content
+.popup-container {
+  font-family: var(--ion-font-family, sans-serif);
+  color: #fff; // Set default text color to white
+
+  // Helper for text shadow
+  %text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  // Header section for the point's name
+  .popup-header {
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); // Translucent border
+    text-align: center;
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #fff;
+      @extend %text-shadow;
+    }
+  }
+
+  // Body section for additional details
+  .popup-body {
+    padding: 16px;
+    font-size: 0.9rem;
+    text-align: center;
+    @extend %text-shadow;
+
+    .popup-description-label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .popup-description {
+      margin: 0;
+      word-break: break-all;
+    }
+  }
+
+  // Action buttons section (no changes needed here as they have solid backgrounds)
+  .popup-actions {
+    display: flex;
+    gap: 12px;
+    padding: 0 16px 16px;
+
+    a {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 500;
+      text-decoration: none;
+      color: #fff;
+      transition: background-color 0.2s ease-in-out;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+      ion-icon {
+        margin-right: 8px;
+        font-size: 1.1rem;
+      }
+
+      &.edit-link {
+        background-color: var(--ion-color-success, #2dd36f);
+        &:hover {
+          background-color: var(--ion-color-success-shade, #28ba62);
+        }
+      }
+
+      &.delete-link {
+        background-color: var(--ion-color-danger, #eb445a);
+        &:hover {
+          background-color: var(--ion-color-danger-shade, #cf3c4f);
+        }
+      }
+    }
+  }
+}

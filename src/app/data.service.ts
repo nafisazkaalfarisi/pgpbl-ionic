@@ -1,25 +1,39 @@
 import { Injectable } from '@angular/core';
 import { ref, push, onValue, remove, get, update } from 'firebase/database';
 import { database } from './firebase.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+
+  private _pointsChanged = new Subject<void>();
+
+  get pointsChanged$() {
+    return this._pointsChanged.asObservable();
+  }
+
 // Save a new point
 savePoint(point: { name: string, coordinates: string }) {
   const pointsRef = ref(database, 'points');
-  return push(pointsRef, point);
+  const promise = push(pointsRef, point);
+  promise.then(() => this._pointsChanged.next());
+  return promise;
 }
 
 deletePoint(key: string) {
  const pointRef = ref(database, `points/${key}`);
- return remove(pointRef);
+ const promise = remove(pointRef);
+ promise.then(() => this._pointsChanged.next());
+ return promise;
 }
 
 updatePoint(key: string, point: { name: string, coordinates: string }) {
   const pointRef = ref(database, `points/${key}`);
-  return update(pointRef, point);
+  const promise = update(pointRef, point);
+  promise.then(() => this._pointsChanged.next());
+  return promise;
 }
 
 

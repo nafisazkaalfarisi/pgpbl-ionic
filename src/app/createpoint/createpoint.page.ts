@@ -2,9 +2,11 @@ import { Component, OnInit, inject } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
 import { DataService } from '../data.service';
 import * as L from 'leaflet';
+import { auth } from '../firebase.service';
+import { Router } from '@angular/router';
 
 const iconRetinaUrl = 'assets/icon/barca.png'; // sama seperti maps.page.ts
-const iconUrl = 'assets/marker-icon.png';
+const iconUrl = 'assets/icon/barca.png';
 const shadowUrl = 'assets/marker-shadow.png';
 const iconDefault = L.icon({
   iconRetinaUrl,
@@ -30,6 +32,7 @@ export class CreatepointPage implements OnInit {
   private navCtrl = inject(NavController);
   private alertCtrl = inject(AlertController);
   private dataService = inject(DataService);
+  private router = inject(Router);
 
   name = '';
   coordinates = '';
@@ -49,7 +52,7 @@ export class CreatepointPage implements OnInit {
       );
 
       const esri = L.tileLayer(
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        'https://server..arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         {
           attribution: 'ESRI',
         }
@@ -82,13 +85,34 @@ export class CreatepointPage implements OnInit {
   }
 
   async save() {
+    if (!auth.currentUser) {
+      const alert = await this.alertCtrl.create({
+        header: 'Authentication Required',
+        message: 'You need to be logged in to save a point.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+          },
+          {
+            text: 'Login',
+            handler: () => {
+              this.router.navigate(['/login']);
+            },
+          },
+        ],
+      });
+      await alert.present();
+      return;
+    }
+
     if (this.name && this.coordinates) {
       try {
         await this.dataService.savePoint({
           name: this.name,
           coordinates: this.coordinates,
         });
-        this.navCtrl.navigateBack('/maps');
+        this.router.navigate(['/tabs/maps']);
       } catch (error: any) {
         const alert = await this.alertCtrl.create({
           header: 'Save Failed',
